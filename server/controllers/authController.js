@@ -30,6 +30,7 @@ const registerUser = async (req, res) => {
          email : newUser.email,
          role : newUser.role,
          profileImage : newUser.profileImage,
+        //  cart:[],
          token : generateToken(newUser._id)
         }
     )
