@@ -74,7 +74,7 @@ export default function Header() {
           <a href="#" className="text-gray-600 hover:text-gray-800">
             All Product
           </a>
-          <Button className="bg-green-500 hover:bg-green-600 text-white w-full">
+          <Button onClick={() => setAuthModalOpen(true)} className="bg-green-500 hover:bg-green-600 text-white w-full">
             Login
           </Button>
         </div>

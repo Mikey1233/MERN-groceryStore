@@ -25,6 +25,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Eye, EyeOff, Mail, Lock, User, Upload, X } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -57,6 +59,9 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  /////register
+  const { register } = useAuth();
+
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -76,19 +81,36 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       profileImage: null,
     },
   });
+const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    setSelectedImage(file);
+    const reader = new FileReader();
+    
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string); // base64 preview
+    };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      signupForm.setValue("profileImage", file);
-    }
-  };
+    reader.readAsDataURL(file); // 🟢 This is required
+
+    signupForm.setValue("profileImage", file); // Set file in form state
+  }
+};
+
+  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     setSelectedImage(file);
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setImagePreview(reader.result as string);
+  //     };
+  //     // console.log()
+  //     signupForm.setValue("profileImage", file);
+  //     // console.log(signupForm.getValues().)
+  //   }
+  // };
+      // console.log(imagePreview)
 
   const removeImage = () => {
     setSelectedImage(null);
@@ -100,36 +122,59 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     if (fileInput) fileInput.value = "";
   };
 
+
+  //hande login
   const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
-    try{
- setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Login:", values);
-    setIsLoading(false);
-    onOpenChange(false);
-    }catch(err){
-      console.log(err)
+    try {
+      setIsLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Login:", values);
+      setIsLoading(false);
+      onOpenChange(false);
+    } catch (err) {
+      console.log(err);
     }
-   
   };
 
+
+  ////hande submit
+  
   const onSignupSubmit = async (values: z.infer<typeof signupSchema>) => {
+  try {
+    console.log("🚀 Starting signup");
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Signup:", {
-      ...values,
-      profileImage: selectedImage ? selectedImage.name : null,
+    console.log(values.profileImage)
+
+    const res = await register({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      adminToken: values.adminToken,
+      profileImage: values.profileImage
     });
-    setIsLoading(false);
-    onOpenChange(false);
-  };
+    
+
+    console.log("✅ Registration successful:", res);
+
+    // Optional: close modal or redirect
+  } catch (err) {
+    console.error("❌ Signup error:", err);
+    // toast.error("Signup failed"); // Optional UI feedback
+  } finally{
+    setIsLoading(false)
+    setImagePreview("")
+    signupForm.reset()
+  }
+};
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
+
           <DialogTitle className="text-xl font-bold text-center text-gray-800">
             Welcome to BigCart
           </DialogTitle>
@@ -231,6 +276,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
           {/* signUp */}
 
           <TabsContent value="signup" className="space-y-2">
+          
+
             <Form {...signupForm}>
               <form
                 onSubmit={signupForm.handleSubmit(onSignupSubmit)}
@@ -258,7 +305,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                                   <button
                                     type="button"
                                     onClick={removeImage}
-                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 transition-colors"
+                                    className="absolute top-1 right-2 z-[1000px] bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 transition-colors"
                                   >
                                     <X className="w-3 h-3" />
                                   </button>

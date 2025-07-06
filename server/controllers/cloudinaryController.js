@@ -1,35 +1,31 @@
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2
+
+// Cloudinary config
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // no NEXT_PUBLIC prefix on backend
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const signedUpload = async (req, res) => {
   try {
+    const { paramsToSign } = req.body;
+    console.log(paramsToSign)
 
-      const timestamp =  Math.round((new Date()).getTime() / 1000);
-      const folder = "my_app_uploads"; // optional: organize uploads into a folder
+    if (!paramsToSign) {
+      return res.status(400).json({ error: "paramsToSign is required" });
+    }
 
-  const signature = cloudinary.utils.api_sign_request(
-    {
-      timestamp: timestamp,
-      folder: folder,
-    },
-    process.env.CLOUDINARY_API_SECRET
-  );
+    const signature = cloudinary.utils.api_sign_request(
+      paramsToSign,
+      process.env.CLOUDINARY_API_SECRET
+    );
 
-  res.json({
-    timestamp,
-    signature,
-    folder,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-  });
+    res.status(200).json({ signature });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error("Error generating signature:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-};
+}
+module.exports = signedUpload
 
-module.exports = signedUpload;

@@ -1,6 +1,8 @@
 const express = require("express")
 
-const route = express.Router()
+const router = express.Router()
+// const signedUpload = require("../controllers/cloudinaryController")
 const signedUpload = require("../controllers/cloudinaryController")
 
-route.get("/get-signature",signedUpload)
+router.post("/upload",signedUpload)
+module.exports = router 

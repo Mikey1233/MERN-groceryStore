@@ -1,5 +1,12 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken")
+
+const generateToken = (id, role) => {
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+    expiresIn: '7d',
+  });
+};
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, profileImage, adminToken } = req.body;
@@ -21,6 +28,7 @@ const registerUser = async (req, res) => {
       password: hashedPwd,
       profileImage,
       role,
+       cart: []
     });
 
     res.status(200).json(
@@ -31,7 +39,7 @@ const registerUser = async (req, res) => {
          role : newUser.role,
          profileImage : newUser.profileImage,
         //  cart:[],
-         token : generateToken(newUser._id)
+         token : generateToken(newUser._id,newUser.role)
         }
     )
   } catch (error) {}
@@ -39,4 +47,4 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {};
 
-const getUser = async (req, res) => {};
+module.exports = {registerUser,loginUser}
