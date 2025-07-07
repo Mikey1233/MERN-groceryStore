@@ -28,7 +28,7 @@ const registerUser = async (req, res) => {
       password: hashedPwd,
       profileImage,
       role,
-       cart: []
+      cart: []
     });
 
     res.status(200).json(

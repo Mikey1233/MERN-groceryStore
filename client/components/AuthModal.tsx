@@ -276,8 +276,6 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           {/* signUp */}
 
           <TabsContent value="signup" className="space-y-2">
-          
-
             <Form {...signupForm}>
               <form
                 onSubmit={signupForm.handleSubmit(onSignupSubmit)}

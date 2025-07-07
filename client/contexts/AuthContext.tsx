@@ -10,17 +10,16 @@ import {
 import axios from "@/lib/axios"; // assume this is your axios instance
 // import axios from 'axios';
 
-interface User {
+type User =  {
   name: string;
   email: string;
   role: "admin" | "customer";
   token: string;
 }
-interface SignUp {
+type SignUp = {
   name: string;
   email: string;
   password: string;
-  // role: 'admin' | 'customer';
   adminToken?: string;
   profileImage?: string | null;
 }
@@ -33,7 +32,7 @@ interface CartItem {
   quantity: number;
 }
 
-interface AuthContextType {
+type AuthContextType = {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   // register: (name: string, email: string, password: string) => Promise<void>;

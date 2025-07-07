@@ -10,7 +10,7 @@ cloudinary.config({
 const signedUpload = async (req, res) => {
   try {
     const { paramsToSign } = req.body;
-    console.log(paramsToSign)
+    // console.log(paramsToSign)
 
     if (!paramsToSign) {
       return res.status(400).json({ error: "paramsToSign is required" });
