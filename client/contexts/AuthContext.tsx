@@ -8,21 +8,28 @@ import {
   ReactNode,
 } from "react";
 import axios from "@/lib/axios"; // assume this is your axios instance
+// import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 // import axios from 'axios';
 
-type User =  {
+type User = {
   name: string;
   email: string;
   role: "admin" | "customer";
   token: string;
-}
+  profileImage?: string | null;
+};
 type SignUp = {
   name: string;
   email: string;
   password: string;
   adminToken?: string;
   profileImage?: string | null;
-}
+};
+type SignIn = {
+  email: string;
+  password: string;
+};
 
 interface CartItem {
   productId: string;
@@ -34,14 +41,14 @@ interface CartItem {
 
 type AuthContextType = {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (value: SignIn) => Promise<User>;
   // register: (name: string, email: string, password: string) => Promise<void>;
-  register: (value: SignUp) => Promise<void>;
+  register: (value: SignUp) => Promise<User>;
   logout: () => void;
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
   addToCart: (product: CartItem) => void;
-}
+};
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -52,6 +59,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -62,8 +70,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   useEffect(() => {
-    if (user) localStorage.setItem("user", JSON.stringify(user));
-    else localStorage.removeItem("user");
+    if (user)
+      { localStorage.setItem("user", JSON.stringify(user));}
+    else {
+      localStorage.removeItem("user");
+      // router.push("/");
+    }
   }, [user]);
 
   useEffect(() => {
@@ -87,21 +99,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const login = async (email: string, password: string) => {
-    const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const res = await axios.post("/auth/login", { email, password, guestCart });
-    const data = res.data;
-
-    setUser({ ...data.user, token: data.token });
-    setCart(data.user.cart);
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ ...data.user, token: data.token })
-    );
-    localStorage.setItem("cart", JSON.stringify(data.user.cart));
+  const login = async (value: SignIn) => {
+    try {
+      console.log(value)
+      const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const res = await axios.post("/auth/login", {
+        email: value.email,
+        password: value.password,
+        guestCart,
+      });
+      const data = res.data;
+      console.log(data);
+      setUser({ ...data.user, token: data.token });
+      setCart(data.user.cart);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...data.user, token: data.token })
+      );
+      localStorage.setItem("cart", JSON.stringify(data.user.cart));
+      return data;
+    } catch (err) {
+      console.error("Error loging user in", err);
+    }
   };
 
-  const register = async (value: SignUp) => {
+  const register = async (value: SignUp): Promise<User> => {
+    let uploadedPublicId = "";
     try {
       const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
       console.log("🛒 Guest cart", guestCart);
@@ -119,8 +142,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // if (!signRes.ok) throw new Error("Failed to get Cloudinary signature");
 
         const { signature } = signRes.data;
-
-        // Step 1b: Upload image to Cloudinary
+        console.log(signature);
         const formData = new FormData();
         formData.append("file", value.profileImage);
         formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
@@ -135,8 +157,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             body: formData,
           }
         );
+        console.log(uploadRes);
 
         const uploadData = await uploadRes.json();
+        console.log(uploadData);
 
         if (!uploadData.secure_url) throw new Error("Image upload failed");
 
@@ -144,6 +168,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           .replace("/upload/", "/upload/f_auto,q_auto/")
           .replace(/\.(jpg|jpeg|png)$/i, ".webp");
         imageUrl = rawImageUrl;
+        uploadedPublicId = uploadData.public_id;
       }
 
       // Step 2: Add image URL to user data
@@ -151,13 +176,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // ...value,
         name: value.name,
         email: value.email,
-        password: value.email,
-        profileImage: imageUrl,
+        password: value.password,
+        profileImage: imageUrl || "",
         adminToken: value.adminToken,
         // image: imageUrl,
       });
 
       const data = res.data;
+      console.log(data.user);
 
       setUser({ ...data.user, token: data.token });
       setCart(guestCart);
@@ -172,10 +198,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return data;
     } catch (err) {
       console.error("❌ Error during register:", err);
+
+      // 🚨 Cleanup uploaded image if there was an error
+      if (uploadedPublicId) {
+        try {
+          await axios.post("/uploadImage/delete", {
+            publicId: uploadedPublicId,
+          });
+          console.log("🧹 Cleaned up image from Cloudinary");
+        } catch (deleteErr) {
+          console.error(
+            "⚠️ Failed to delete image from Cloudinary:",
+            deleteErr
+          );
+        }
+      }
+
       throw err;
     }
   };
-
+ 
   const logout = () => {
     setUser(null);
     setCart([]);

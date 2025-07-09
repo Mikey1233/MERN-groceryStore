@@ -27,5 +27,24 @@ const signedUpload = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = signedUpload
+
+const deleteUpload = async(req,res)=>{
+  try{
+     const {publicId} = req.body
+      if (!publicId) {
+      return res.status(400).json({ error: 'publicId is required' });
+    }
+    const result = await cloudinary.uploader.destroy(publicId);
+   res.status(200).json({ message: 'Image deleted successfully' });
+    if (result.result !== 'ok') {
+      return res.status(500).json({ error: 'Failed to delete image from Cloudinary' });
+    }
+
+  }catch(err){
+     console.error("Cloudinary deletion error:", err);
+    res.status(500).json({ error: 'Server error while deleting image' });
+  }
+ 
+}
+module.exports = {signedUpload,deleteUpload}
 

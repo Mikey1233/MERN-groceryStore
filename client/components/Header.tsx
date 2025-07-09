@@ -8,9 +8,14 @@ import { AuthModal } from "./AuthModal";
 import Link from "next/link";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import User
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header() {
-  const pathName = usePathname()
+  const { user, logout } = useAuth();
+  // console.log(user)
+  const pathName = usePathname();
   //track states for menu on mobile view
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   //track states for auth modal
@@ -37,8 +42,12 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-         
-          <div className={clsx("relative inline-block rounded-full" ,{ "p-[2px] bg-[conic-gradient(at_top_right,_green,#22c55e,#16a34a,#22c55e)] animate-spin-slow": pathName === "/adminDashboard"})}>
+          <div
+            className={clsx("relative inline-block rounded-full", {
+              "p-[2px] bg-[conic-gradient(at_top_right,_green,#22c55e,#16a34a,#22c55e)] animate-spin-slow":
+                pathName === "/adminDashboard",
+            })}
+          >
             <div className="bg-white rounded-full">
               <Link
                 href="/adminDashboard"
@@ -58,41 +67,55 @@ export default function Header() {
         </nav>
 
         {/* Right side */}
-        <div className="flex items-center gap-4">
-          
-            <Link href={"/cart"} className="relative">
-             <ShoppingCart className="w-6 h-6 text-gray-600" />
-            <Badge className="absolute -top-2 -right-2 bg-green-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0">
-              0
-            </Badge>
-            </Link>
-          <div className="hidden md:block">
-            <Button
-              onClick={() => setAuthModalOpen(true)}
-              className="bg-green-400 hover:bg-green-600 text-white px-6"
-            >
-              Login
-            </Button>
-          </div>
 
-          {/* Hamburger Icon */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden text-gray-600 focus:outline-none"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-        </div>
+        {/* login active state */}
+        {user ? (
+          <div className="flex items-center gap-4">
+            <Link href={"/cart"} className="relative">
+              <ShoppingCart className="w-6 h-6 text-gray-600" />
+              <Badge className="absolute -top-2 -right-2 bg-green-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0">
+                0
+              </Badge>
+            </Link>
+            <Avatar>
+              <AvatarImage src={user?.profileImage ?? undefined} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <Button className="cursor-pointer" onClick={() => logout()}>Logout</Button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-4">
+            <div className="hidden md:block">
+              <Button
+                onClick={() => setAuthModalOpen(true)}
+                className="bg-green-400 hover:bg-green-600 text-white cursor-pointer px-6"
+              >
+                Get Started
+              </Button>
+            </div>
+
+            {/* Hamburger Icon */}
+            <button
+              onClick={toggleMenu}
+              className="md:hidden text-gray-600 focus:outline-none"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden mt-4 flex flex-col gap-4">
-          <Link href="/adminDashboard" className="text-gray-600 hover:text-gray-800">
+          <Link
+            href="/adminDashboard"
+            className="text-gray-600 hover:text-gray-800"
+          >
             Seller Dashboard
           </Link>
           <Link href="/" className="text-gray-600 hover:text-gray-800">

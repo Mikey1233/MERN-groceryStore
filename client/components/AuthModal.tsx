@@ -26,6 +26,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Eye, EyeOff, Mail, Lock, User, Upload, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+// import { useAuth } from "@/contexts/AuthContext";
 
 
 const loginSchema = z.object({
@@ -53,6 +55,7 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ open, onOpenChange }: AuthModalProps) {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +63,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   /////register
-  const { register } = useAuth();
+  const { register,user,login } = useAuth();
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -128,14 +131,25 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setIsLoading(true);
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Login:", values);
-      setIsLoading(false);
-      onOpenChange(false);
+       const res = await login({
+      email: values.email,
+      password: values.password,
+    });
+    
+    
+
+    console.log("✅ login successful:", res);
+     onOpenChange(false);
+     setIsLoading(false);
+    return router.push(res?.role === "admin"? "/adminDashboard" :"cart");
     } catch (err) {
-      console.log(err);
-    }
-  };
+      console.log("sigin in error",err);
+    }finally{
+    setIsLoading(false)
+    setImagePreview("")
+    signupForm.reset()
+  }
+  }
 
 
   ////hande submit
@@ -154,8 +168,11 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       profileImage: values.profileImage
     });
     
+    
 
     console.log("✅ Registration successful:", res);
+     onOpenChange(false);
+    return router.push(res?.role === "admin"? "/adminDashboard" :"cart");
 
     // Optional: close modal or redirect
   } catch (err) {
