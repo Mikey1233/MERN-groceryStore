@@ -120,3 +120,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/* .rotating-image {
+  animation: spin 20s linear infinite;
+  display: block;
+  margin: 0 0; 
+}
+
+ */
+ .rotating-image {
+  transition: transform 0.7s ease;
+  display: block;
+  margin: 0 auto;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.rotating-image:hover {
+  transform: rotate(180deg);
+}
+

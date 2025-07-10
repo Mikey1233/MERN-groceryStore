@@ -24,7 +24,7 @@ export default function Header() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <header className="bg-white shadow-sm px-6 py-4">
+    <header className="bg-white shadow-sm px-6 py-4 md:px-24">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link href={"/"} className="flex items-center space-x-2">
