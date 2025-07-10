@@ -3,6 +3,7 @@ import About from "@/components/home/About";
 import Category from "@/components/home/Category";
 import Cta from "@/components/home/Cta";
 import Hero from "@/components/home/Hero";
+import BestSeller from "@/components/home/BestSeller";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero/>
      <About/>
      <Category/>
+     <BestSeller/>
      <Cta/>
       <Footer/>
     </div>
