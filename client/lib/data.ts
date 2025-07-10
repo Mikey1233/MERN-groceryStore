@@ -7,6 +7,10 @@ import bakerys from "@/public/assets/bakery_image.png";
 import cereals from "@/public/assets/grain_image.png";
 
 import quico from "@/public/assets/quinoa_image.png"
+import apple from "@/public/assets/apple_image.png"
+import cheese from "@/public/assets/cheese_image.png"
+import carrot from "@/public/assets/carrot_image.png"
+import bread from "@/public/assets/whole_wheat_bread_image.png"
 export const CategoryData = [
   {
     name: "Organic veggies",
@@ -57,7 +61,28 @@ export const BestSellers = [
         name :"Brown Bread",
         price : 23,
         slashPrice : 55,
-        image : quico,
+        image : bread,
         category : "bakery"
+    },
+       {
+        name :"Carrot 500g",
+        price : 3,
+        slashPrice : 5,
+        image : carrot,
+        category : "vegetables"
+    },
+       {
+        name :"Apple 1 kg",
+        price : 123,
+        slashPrice : 155,
+        image : apple,
+        category : "fruits"
+    },
+       {
+        name :"Cheese 200g",
+        price : 34,
+        slashPrice : 55,
+        image : cheese,
+        category : "instant foods"
     }
 ]

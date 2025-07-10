@@ -8,7 +8,7 @@ function ProductRating({name,slashPrice,price,image,category}:{
     slashPrice : number,
     price :number,
     image : string | StaticImageData,
-    category : string
+    category : string,
 }) {
   return (
  <Card className="bg-white border hover:shadow-lg transition-shadow">
@@ -49,9 +49,9 @@ function ProductRating({name,slashPrice,price,image,category}:{
                   </div>
                   <Button
                     size="sm"
-                    className="bg-green-500 hover:bg-green-600 text-white"
+                    className="bg-green-500 p-1 cursor-pointer hover:bg-green-600 text-white rounded-none"
                   >
-                    Add
+                    {/* Add */}
                     <Plus/>
                   </Button>
                 </div>

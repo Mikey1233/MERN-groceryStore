@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ShoppingCart } from "lucide-react";
+import { Import, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Menu, X } from "lucide-react";
@@ -9,8 +9,12 @@ import Link from "next/link";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import Logo from "@/public/assets/5.png"
+import { ForkKnife } from "lucide-react";
+// Import Image
 // import User
 import { useAuth } from "@/contexts/AuthContext";
+import Image from "next/image";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -28,17 +32,14 @@ export default function Header() {
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link href={"/"} className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
-            <ShoppingCart className="w-5 h-5 text-white" />
+          <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+            {/* <ShoppingCart className="w-5 h-5 text-white" /> */}
+            <ForkKnife className="w-5 h-5 font-extrabold text-white"/>
+            {/* <Image src={Logo} height={100} width={100} alt="logo" /> */}
           </div>
-          <span className="text-xl font-semibold text-gray-800">walCart</span>
+          <span className="text-xl font-semibold text-gray-800">foodCart</span>
         </Link>
-        {/* <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-            <div className="w-4 h-4 bg-white rounded-full"></div>
-          </div>
-          <span className="text-xl font-bold text-gray-800">BigCart</span>
-        </div> */}
+        
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
@@ -73,7 +74,7 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <Link href={"/cart"} className="relative">
               <ShoppingCart className="w-6 h-6 text-gray-600" />
-              <Badge className="absolute -top-2 -right-2 bg-green-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0">
+              <Badge className="absolute -top-2 -right-2 bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0">
                 0
               </Badge>
             </Link>
@@ -88,7 +89,7 @@ export default function Header() {
             <div className="hidden md:block">
               <Button
                 onClick={() => setAuthModalOpen(true)}
-                className="bg-green-400 hover:bg-green-600 text-white cursor-pointer px-6"
+                className="bg-green-500 rounded-none hover:bg-green-600 text-white cursor-pointer px-6"
               >
                 Get Started
               </Button>
@@ -126,7 +127,7 @@ export default function Header() {
           </Link>
           <Button
             onClick={() => setAuthModalOpen(true)}
-            className="bg-green-400 hover:bg-green-600 text-white w-full"
+            className="bg-green-500 hover:bg-green-600 text-white w-full"
           >
             Login
           </Button>
