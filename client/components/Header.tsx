@@ -119,7 +119,7 @@ export default function Header() {
          <X className="w-6 h-6 absolute right-2 top-3" onClick={closeMenu}/>
         <div className="flex flex-col gap-6 p-6 pt-20">
           {user && (
-            <Avatar>
+            <Avatar className="w-10 h-10">
               <AvatarImage src={user?.profileImage ?? undefined} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>

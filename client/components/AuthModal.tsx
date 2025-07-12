@@ -178,7 +178,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center text-gray-800">
-            Welcome to BigCart
+            Welcome to foodCart
           </DialogTitle>
           <DialogDescription className="text-center text-gray-600">
             Sign in to your account or create a new one to get started
