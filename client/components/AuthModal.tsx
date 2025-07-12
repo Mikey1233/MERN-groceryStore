@@ -122,6 +122,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         email: values.email,
         password: values.password,
       });
+      if (!res) throw new Error("login error");
 
       console.log("✅ login successful:", res);
       onOpenChange(false);
