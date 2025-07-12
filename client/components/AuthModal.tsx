@@ -127,6 +127,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
       // console.log("✅ login successful:");
       onOpenChange(false);
+      loginForm.reset()
       setIsLoading(false);
       return router.push(res?.role === "admin" ? "/adminDashboard" : "cart");
     } catch (err) {
@@ -158,6 +159,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       // console.log("✅ Registration successful:", res);
      
       onOpenChange(false);
+       signupForm.reset();
       return router.push(res?.role === "admin" ? "/adminDashboard" : "cart");
 
       // Optional: close modal or redirect
