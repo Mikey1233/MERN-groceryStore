@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const session  = localStorage.getItem("user")
