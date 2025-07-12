@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter, ChevronLeft, ChevronRight, Star, Plus } from "lucide-react"
+import {  ChevronLeft, ChevronRight, Star, Plus } from "lucide-react"
 
 // Sample product data - replace with your actual menu items
 const products = [
@@ -134,24 +133,24 @@ function ProductsSection() {
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-green-400 hover:bg-green-500 text-black p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-green-400 hover:bg-green-500 text-black p-2 md:p-3 rounded-none md:rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                 aria-label="Previous products"
               >
-                <ChevronLeft className="h-6 w-6" />
+                <ChevronLeft className="h-6 w-6 text-white" />
               </button>
 
               <button
                 onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-green-400 hover:bg-green-500 text-black p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-green-400 hover:bg-green-500 text-black p-2 md:p-3 rounded-none md:rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                 aria-label="Next products"
               >
-                <ChevronRight className="h-6 w-6" />
+                <ChevronRight className="h-6 w-6 text-white" />
               </button>
             </>
           )}
 
           {/* Products Grid */}
-          <div className="mx-12">
+          <div className="mx-8  md:mx-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500 ease-in-out">
               {currentProducts.map((product, index) => (
                 <div
@@ -170,7 +169,7 @@ function ProductsSection() {
                       alt={product.name}
                       className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute top-4 right-4 bg-green-400 text-black px-3 py-1 rounded-full text-sm font-semibold">
+                    <div className="absolute top-4 right-4 text-xs text-gray-500 mb-2  px-3 py-1 ">
                       {product.category}
                     </div>
                   </div>
@@ -224,7 +223,7 @@ function ProductsSection() {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <Button className="bg-black hover:bg-gray-800 text-white px-8 py-3 text-lg font-semibold">
+          <Button className="bg-green-400 hover:bg-green-600 rounded-none text-white px-8 py-3 text-lg">
             View Full Menu
           </Button>
         </div>
