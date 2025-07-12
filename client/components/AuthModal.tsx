@@ -27,6 +27,7 @@ import * as z from "zod";
 import { Eye, EyeOff, Mail, Lock, User, Upload, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import {toast} from "sonner"
 // import { useAuth } from "@/contexts/AuthContext";
 
 const loginSchema = z.object({
@@ -124,12 +125,13 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       });
       if (!res) throw new Error("login error");
 
-      console.log("✅ login successful:", res);
+      // console.log("✅ login successful:");
       onOpenChange(false);
       setIsLoading(false);
       return router.push(res?.role === "admin" ? "/adminDashboard" : "cart");
     } catch (err) {
       console.log("sigin in error", err);
+      // toast.error("failed to sign in")
     } finally {
       setIsLoading(false);
       setImagePreview("");
@@ -153,7 +155,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         profileImage: values.profileImage,
       });
 
-      console.log("✅ Registration successful:", res);
+      // console.log("✅ Registration successful:", res);
+     
       onOpenChange(false);
       return router.push(res?.role === "admin" ? "/adminDashboard" : "cart");
 

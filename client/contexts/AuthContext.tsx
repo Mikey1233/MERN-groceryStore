@@ -10,6 +10,7 @@ import {
 import axios from "@/lib/axios"; // assume this is your axios instance
 // import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 // import axios from 'axios';
 
 type User = {
@@ -59,7 +60,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
-  // const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -99,33 +100,81 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const login = async (value: SignIn) => {
-    try {
-      console.log(value)
-      const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const res = await axios.post("/auth/login", {
-        email: value.email,
-        password: value.password,
-        guestCart,
-      });
+  // const login = async (value: SignIn) => {
+  //   try {
+  //     console.log(value)
+  //     const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  //     const res = await axios.post("/auth/login", {
+  //       email: value.email,
+  //       password: value.password,
+  //       guestCart,
+  //     });
       
-       if (!res?.data || res.status !== 200) {
-        throw new Error("Error in logging in");
-      }
-      const data = res.data;
-      // console.log(data);
-      setUser({ ...data.user, token: data.token });
-      setCart(data.user.cart);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ ...data.user, token: data.token })
-      );
-      localStorage.setItem("cart", JSON.stringify(data.user.cart));
-      return data;
-    } catch (err) {
-      console.error("Error loging user in", err);
+  //      if (!res?.data || res.status !== 200) {
+  //       throw new Error("Error in logging in");
+  //     }
+  //     const data = res.data;
+  //     // console.log(data);
+  //     setUser({ ...data.user, token: data.token });
+  //     setCart(data.user.cart);
+  //     localStorage.setItem(
+  //       "user",
+  //       JSON.stringify({ ...data.user, token: data.token })
+  //     );
+  //     localStorage.setItem("cart", JSON.stringify(data.user.cart));
+  //     toast.success(" login successful")
+
+  //     return data;
+  //   } catch (err) {
+  //     console.error("Error loging user in", err);
+  //     toast.error('Error loging user in')
+  //   }
+  // };
+// import axios from "axios";
+// import { toast } from "sonner";
+
+const login = async (value: SignIn) => {
+  try {
+    const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    const res = await axios.post("/auth/login", {
+      email: value.email,
+      password: value.password,
+      guestCart,
+    });
+
+    // Handle unexpected responses
+    if (!res?.data || res.status !== 200) {
+      throw new Error("Unexpected server response");
     }
-  };
+
+    const { user, token } = res.data;
+
+    if (!user || !token) {
+      throw new Error("Invalid login response");
+    }
+
+    setUser({ ...user, token });
+    setCart(user.cart || []);
+    localStorage.setItem("user", JSON.stringify({ ...user, token }));
+    localStorage.setItem("cart", JSON.stringify(user.cart || []));
+
+    toast.success("Login successful");
+    return res.data;
+
+  } catch (err: any) {
+    console.error("Login error:", err);
+
+    // Try to extract error message from response
+    const message =
+      err?.response?.data?.message ||
+      (err?.response?.status === 400
+        ? "Invalid email or password"
+        : "Failed to login. Please try again");
+
+    toast.error(message);
+  }
+};
 
   const register = async (value: SignUp): Promise<User> => {
   let uploadedPublicId = "";
@@ -215,10 +264,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem("cart", JSON.stringify(guestCart));
 
     await syncCart(guestCart);
-
+     toast.success("welcome to foodCart")
     return data.user;
   } catch (err) {
     console.error("❌ Error during register:", err);
+    toast.error("error occured during registration")
 
     // Cleanup Cloudinary image if it was uploaded
     if (uploadedPublicId) {
@@ -242,6 +292,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setCart([]);
     localStorage.removeItem("user");
     localStorage.removeItem("cart");
+     toast.success(" logout successful")
+    router.push("/")
   };
 
   const addToCart = (product: CartItem) => {

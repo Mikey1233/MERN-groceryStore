@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
+import { Toaster } from "sonner";
 // import ProtectedRoute from "@/contexts/ProtectRoute";
 
 const geistSans = Geist({
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-white`}
       >
         <AuthProvider>
+          <Toaster position="bottom-right"/>
           {/* <ProtectedRoute> */}
             <Header />
 
