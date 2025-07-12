@@ -124,13 +124,15 @@ export default function Header() {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           )}
-          <Link
+         {
+          user?.role == "admin" &&(<Link
             href="/adminDashboard"
             className="text-gray-600 hover:text-gray-800"
             onClick={closeMenu}
           >
             Seller Dashboard
-          </Link>
+          </Link>)
+         } 
           <Link
             href="/"
             className="text-gray-600 hover:text-gray-800"

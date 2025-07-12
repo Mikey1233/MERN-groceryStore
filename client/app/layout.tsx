@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair,Poppins} from "next/font/google";
+import { Lato} from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
@@ -15,9 +15,9 @@ import { Toaster } from "sonner";
 //   weight:["100","200","300","400","500","600","700","800","900"],
 //   subsets : ["latin"]
 // });
-const playfair = Playfair({
-  variable :"--font-playfair",
-  weight :['300',"400","500","800"],
+const lato = Lato({
+  variable :"--font-lato",
+  weight :["100","300","400","700","900"],
   subsets :["latin"]
 })
 
@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.className} antialiased  overflow-x-hidden bg-white`}
+        className={`${lato.className} antialiased  overflow-x-hidden bg-white`}
       >
         <AuthProvider>
           <Toaster position="bottom-right"/>

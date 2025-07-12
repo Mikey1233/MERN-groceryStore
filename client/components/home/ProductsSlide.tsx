@@ -3,62 +3,72 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {  ChevronLeft, ChevronRight, Star, Plus } from "lucide-react"
+import banana from "@/public/assets/banana_image_1.png"
+import SliceBread from "@/public/assets/brown_bread_image.png"
+import Pepsi from "@/public/assets/pepsi_image_2.png"
+import Oranges from "@/public/assets/orange_image.png"
+import Potatoes from "@/public/assets/potato_image_1.png"
+import SevenUp from "@/public/assets/seven_up_image_1.png"
+import Image from "next/image"
+import { Card, CardContent } from "../ui/card"
+
+
 
 // Sample product data - replace with your actual menu items
 const products = [
   {
     id: 1,
-    name: "Margherita Pizza",
-    description: "Fresh mozzarella, tomato sauce, basil, and olive oil on our signature wood-fired crust",
+    name: "Banana",
+    description: "Fresh bana, tomato sauce, basil, and olive oil on our signature wood-fired crust",
     price: "$18.99",
-    image: "/placeholder.svg?height=300&width=400",
+    image: banana,
     rating: 4.8,
-    category: "Pizza",
+    category: "fruits",
   },
   {
     id: 2,
-    name: "Grilled Salmon",
+    name: "Sliced bread",
     description: "Atlantic salmon with lemon herb butter, served with roasted vegetables and wild rice",
     price: "$26.99",
-    image: "/placeholder.svg?height=300&width=400",
+    image: SliceBread,
     rating: 4.9,
-    category: "Seafood",
+    category: "bakery",
   },
   {
     id: 3,
-    name: "Beef Tenderloin",
+    name: "Pepsi",
     description: "8oz prime cut with garlic mashed potatoes, asparagus, and red wine reduction",
     price: "$32.99",
-    image: "/placeholder.svg?height=300&width=400",
+    image: Pepsi,
     rating: 4.7,
-    category: "Steaks",
+    category: "drinks",
   },
   {
     id: 4,
-    name: "Chicken Parmesan",
+    name: "Oranges",
     description: "Breaded chicken breast with marinara sauce, mozzarella, served with pasta",
     price: "$22.99",
-    image: "/placeholder.svg?height=300&width=400",
+    image: Oranges,
     rating: 4.6,
-    category: "Chicken",
+    category: "fruits",
   },
   {
     id: 5,
-    name: "Lobster Ravioli",
+    name: "SevenUp",
     description: "House-made ravioli filled with lobster in a creamy tomato basil sauce",
     price: "$28.99",
-    image: "/placeholder.svg?height=300&width=400",
+    image: SevenUp,
     rating: 4.8,
-    category: "Pasta",
+    category: "drinks",
   },
   {
     id: 6,
-    name: "Caesar Salad",
+    name: "Potatoes",
     description: "Crisp romaine lettuce, parmesan cheese, croutons with our signature dressing",
     price: "$14.99",
-    image: "/placeholder.svg?height=300&width=400",
+    image: Potatoes,
     rating: 4.5,
-    category: "Salads",
+    category: "Instant foods",
   },
 ]
 function ProductsSection() {
@@ -150,12 +160,13 @@ function ProductsSection() {
           )}
 
           {/* Products Grid */}
-          <div className="mx-8  md:mx-12">
+          <div className="mx-6  md:mx-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500 ease-in-out">
               {currentProducts.map((product, index) => (
-                <div
+                <Card
                   key={`${product.id}-${currentIndex}`}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group animate-in fade-in slide-in-from-bottom-4"
+                  
+                  className="bg-white flex rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group animate-in fade-in slide-in-from-bottom-4"
                   style={{
                     animationDelay: `${index * 100}ms`,
                     animationDuration: "500ms",
@@ -163,16 +174,18 @@ function ProductsSection() {
                   }}
                 >
                   {/* Product Image */}
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={product.image || "/placeholder.svg"}
+                  <CardContent className="relative overflow-hidden">
+                    <Image
+                      src={product.image}
                       alt={product.name}
-                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                      className=" group-hover:scale-110 place-self-center transition-transform duration-500"
+                       width={120}
+                  height={120}
                     />
-                    <div className="absolute top-4 right-4 text-xs text-gray-500 mb-2  px-3 py-1 ">
+                    <div className="absolute top-0 right-4 text-xs text-gray-500 mb-2  px-3 py-1 ">
                       {product.category}
                     </div>
-                  </div>
+                  </CardContent>
 
                   {/* Product Info */}
                   <div className="p-6">
@@ -199,7 +212,7 @@ function ProductsSection() {
                   </Button>
                     </div>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
