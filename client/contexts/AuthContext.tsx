@@ -59,7 +59,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -108,8 +108,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         password: value.password,
         guestCart,
       });
+      
+       if (!res?.data || res.status !== 200) {
+        throw new Error("Error in logging in");
+      }
       const data = res.data;
-      console.log(data);
+      // console.log(data);
       setUser({ ...data.user, token: data.token });
       setCart(data.user.cart);
       localStorage.setItem(
@@ -124,99 +128,114 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const register = async (value: SignUp): Promise<User> => {
-    let uploadedPublicId = "";
-    try {
-      const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
-      console.log("🛒 Guest cart", guestCart);
+  let uploadedPublicId = "";
 
-      // Step 1: Upload image to Cloudinary if image exists
-      let imageUrl = "";
-      console.log(value.profileImage);
-      if (value.profileImage) {
-        const timestamp = Math.round(Date.now() / 1000);
-        const folder = "users";
-        const signRes = await axios.post("/uploadImage/upload", {
-          paramsToSign: { timestamp, folder },
+  try {
+    const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    console.log("🛒 Guest cart", guestCart);
+
+    // Step 1: Upload image to Cloudinary if image exists
+    let imageUrl = "";
+
+    if (value.profileImage) {
+      if (typeof value.profileImage !== "object" || !(value.profileImage as any instanceof File)) {
+        throw new Error("Invalid profile image format");
+      }
+
+      // const timestamp = Math.floor(Date.now() / 1000);
+      const folder = "users";
+
+      
+         const signRes = await axios.post("/uploadImage/upload", {
+          folder:  folder ,
         });
 
-        // if (!signRes.ok) throw new Error("Failed to get Cloudinary signature");
+      const { signature ,timestamp} = signRes.data;
+      console.log(signRes.data)
 
-        const { signature } = signRes.data;
-        console.log(signature);
+      if (!process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME) {
+        throw new Error("Cloudinary env variables are missing");
+      }
+
         const formData = new FormData();
         formData.append("file", value.profileImage);
         formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
-        formData.append("timestamp", timestamp.toString());
+        formData.append("timestamp", timestamp);
         formData.append("folder", folder);
         formData.append("signature", signature);
 
-        const uploadRes = await fetch(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/auto/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        console.log(uploadRes);
-
-        const uploadData = await uploadRes.json();
-        console.log(uploadData);
-
-        if (!uploadData.secure_url) throw new Error("Image upload failed");
-
-        const rawImageUrl = uploadData.secure_url
-          .replace("/upload/", "/upload/f_auto,q_auto/")
-          .replace(/\.(jpg|jpeg|png)$/i, ".webp");
-        imageUrl = rawImageUrl;
-        uploadedPublicId = uploadData.public_id;
-      }
-
-      // Step 2: Add image URL to user data
-      const res = await axios.post("/auth/register", {
-        // ...value,
-        name: value.name,
-        email: value.email,
-        password: value.password,
-        profileImage: imageUrl || "",
-        adminToken: value.adminToken,
-        // image: imageUrl,
-      });
-
-      const data = res.data;
-      console.log(data.user);
-
-      setUser({ ...data.user, token: data.token });
-      setCart(guestCart);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ ...data.user, token: data.token })
-      );
-      localStorage.setItem("cart", JSON.stringify(guestCart));
-
-      await syncCart(guestCart);
-
-      return data;
-    } catch (err) {
-      console.error("❌ Error during register:", err);
-
-      // 🚨 Cleanup uploaded image if there was an error
-      if (uploadedPublicId) {
-        try {
-          await axios.post("/uploadImage/delete", {
-            publicId: uploadedPublicId,
-          });
-          console.log("🧹 Cleaned up image from Cloudinary");
-        } catch (deleteErr) {
-          console.error(
-            "⚠️ Failed to delete image from Cloudinary:",
-            deleteErr
-          );
+ 
+      const uploadRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/auto/upload`,
+        {
+          method: "POST",
+          body: formData,
         }
+      );
+      console.log(uploadRes)
+
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload image to Cloudinary");
       }
 
-      throw err;
+      const uploadData = await uploadRes.json();
+      console.log("✅ Uploaded Image Data:", uploadData);
+
+      if (!uploadData.secure_url) {
+        throw new Error("Image upload failed");
+      }
+
+      uploadedPublicId = uploadData.public_id;
+
+      // Optimize image URL
+      imageUrl = uploadData.secure_url.replace(
+        "/upload/",
+        "/upload/f_auto,q_auto/"
+      );
     }
-  };
+
+    // Step 2: Register user
+    const res = await axios.post("/auth/register", {
+      name: value.name,
+      email: value.email,
+      password: value.password,
+      profileImage: imageUrl || "",
+      adminToken: value.adminToken,
+    });
+
+    const data = res.data;
+
+    setUser({ ...data.user, token: data.token });
+    setCart(guestCart);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ ...data.user, token: data.token })
+    );
+    localStorage.setItem("cart", JSON.stringify(guestCart));
+
+    await syncCart(guestCart);
+
+    return data.user;
+  } catch (err) {
+    console.error("❌ Error during register:", err);
+
+    // Cleanup Cloudinary image if it was uploaded
+    if (uploadedPublicId) {
+      try {
+        await axios.post("/uploadImage/delete", {
+          publicId: uploadedPublicId,
+        });
+        console.log("🧹 Cleaned up uploaded image from Cloudinary");
+      } catch (cleanupErr) {
+        console.error("⚠️ Failed to delete image from Cloudinary:", cleanupErr);
+      }
+    }
+
+    throw err;
+  }
+};
+
  
   const logout = () => {
     setUser(null);

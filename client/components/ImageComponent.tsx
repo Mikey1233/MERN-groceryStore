@@ -63,7 +63,7 @@ function ImageComponent() {
      <div className="mb-6 sm:mb-8">
               <Label className="text-base font-medium text-gray-700 mb-3 sm:mb-4 block">Product Image</Label>
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                {[0, 1, 2, 3].map((index) => {
+                {[0, 1].map((index) => {
                   const hasImage = uploadedImages[index]
                   return (
                     <div key={index} className="relative">

@@ -24,7 +24,7 @@ function Footer() {
                 className="flex-1 bg-white border-white text-black placeholder:text-gray-500 focus:ring-2 focus:ring-black"
                 required
               />
-              <Button type="submit" className="bg-black text-white hover:bg-gray-800 px-8 py-2 font-semibold">
+              <Button type="submit" className="bg-green-400 text-white hover:bg-gray-800 px-8 py-2 font-semibold">
                 Subscribe
               </Button>
             </form>

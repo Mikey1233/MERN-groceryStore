@@ -8,7 +8,8 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
+    if (!user || user.role !== "admin") {
+      alert("admin users only")
       router.push("/"); // 👈 optionally trigger modal via query
     }
   }, [user]);
