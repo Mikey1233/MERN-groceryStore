@@ -49,7 +49,7 @@ function ProductRating({name,slashPrice,price,image,category}:{
                   </div>
                   <Button
                     size="sm"
-                    className="bg-green-500 p-1 cursor-pointer hover:bg-green-600 text-white rounded-none"
+                    className="bg-gradient-to-br from-green-400 to-green-600 p-1 cursor-pointer hover:bg-green-600 text-white rounded-none"
                   >
                     {/* Add */}
                     <Plus/>

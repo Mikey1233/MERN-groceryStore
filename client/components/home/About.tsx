@@ -1,118 +1,222 @@
-import { Utensils } from "lucide-react"
-import Image from "next/image"
-import { Button } from "../ui/button"
-function About() {
-  return (
-     <div className="max-w-7xl mx-auto px-4 py-12">
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
-              {/* Right Side - About Section */}
-              <div className="space-y-8">
-                <div>
-                  <p className="text-green-500 text-lg font-medium mb-4">
-                    About Us
-                  </p>
-                  <h1 className="text-4xl lg:text-5xl font-bold text-black mb-6">
-                    Welcome to{" "}
-                    <span className="inline-flex items-center">
-                      <Utensils className="h-10 w-10 text-green-500 mx-2" />
-                      FoodCart
-                    </span>
-                  </h1>
-                </div>
-    
-                <div className="space-y-4 text-gray-500 leading-relaxed">
-                  <p>
-                    Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit.
-                    Aliqu diam amet diam et eos erat ipsum et lorem et sit, sed stet
-                    lorem sit.
-                  </p>
-                  <p>
-                    Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit.
-                    Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit,
-                    sed stet lorem sit clita duo justo magna dolore erat amet
-                  </p>
-                </div>
-    
-                {/* Statistics */}
-                <div className="flex space-x-12">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-1 h-16 bg-green-400"></div>
-                    <div>
-                      <div className="text-4xl font-bold text-green-500">15</div>
-                      <div className="text-gray-400 text-sm">
-                        Years of
-                        <br />
-                        <span className="font-semibold text-gray-500">
-                          EXPERIENCE
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-1 h-16 bg-green-500"></div>
-                    <div>
-                      <div className="text-4xl font-bold text-green-500">50</div>
-                      <div className="text-gray-400 text-sm">
-                        Popular
-                        <br />
-                        <span className="font-semibold text-gray-500">
-                          MASTER CHEFS
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-    
-                <Button className="bg-green-500 cursor-pointer hover:bg-green-600 text-white px-8 py-3 rounded-none font-medium">
-                  READ MORE
-                </Button>
+"use client";
+
+import {
+  Calendar,
+  Clock,
+  Gift,
+  Users,
+  Utensils,
+} from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+
+// Animation settings
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.5,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6},
+  },
+};
+
+// Box data
+const features = [
+  {
+    title: "Menu Customization",
+    gradient: "from-purple-400 to-purple-600",
+    content: (
+      <>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center">
+            <Utensils className="w-6 h-6 text-yellow-900" />
+          </div>
+          <div>
+            <h4 className="font-semibold">Pasta Primavera</h4>
+            <p className="text-sm opacity-90">Customized for dietary needs</p>
+          </div>
+        </div>
+        <div className="flex gap-2 mb-4">
+          <span className="px-3 py-1 bg-green-500 rounded-full text-xs">Gluten-Free</span>
+          <span className="px-3 py-1 bg-blue-500 rounded-full text-xs">Vegan</span>
+        </div>
+        <p className="text-sm opacity-90">
+          Personalize every dish to match your dietary preferences and taste
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "Easy Reservations",
+    gradient: "from-pink-400 to-pink-600",
+    content: (
+      <>
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-sm">Select your date & time</span>
+          <Calendar className="w-5 h-5" />
+        </div>
+        <div className="grid grid-cols-3 gap-2 text-center text-sm mb-4">
+          <div className="bg-white/30 rounded-lg py-2">7:00 PM</div>
+          <div className="bg-white rounded-lg py-2 text-pink-600 font-semibold">7:30 PM</div>
+          <div className="bg-white/30 rounded-lg py-2">8:00 PM</div>
+        </div>
+        <p className="text-sm opacity-90">
+          Book your table instantly with our smart reservation system
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "Loyalty Rewards",
+    gradient: "from-green-400 to-green-600",
+    content: (
+      <>
+        <div className="text-center mb-4">
+          <div className="text-3xl font-bold mb-2">$45.50</div>
+          <div className="text-sm opacity-90 mb-3">Available Balance</div>
+          <div className="bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
+            Gold Member
+          </div>
+        </div>
+        <p className="text-sm opacity-90">
+          Earn points with every visit and unlock exclusive rewards
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "Guest Reviews",
+    gradient: "from-yellow-400 to-yellow-600",
+    content: (
+      <>
+        <div className="space-y-3 mb-4">
+          {[
+            { initials: "JD", name: "John D.", review: "⭐⭐⭐⭐⭐ Amazing pasta!" },
+            { initials: "SM", name: "Sarah M.", review: "⭐⭐⭐⭐⭐ Perfect service" },
+          ].map((r, i) => (
+            <div className="flex items-center gap-3" key={i}>
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold">
+                {r.initials}
               </div>
-              {/* Left Side - Image Grid */}
-              <div className="grid grid-rows-1 md:grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <Image
-                      src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop"
-                      alt="Restaurant interior"
-                      width={400}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <Image
-                      src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop"
-                      alt="Chef cooking"
-                      width={400}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <Image
-                      src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop"
-                      alt="Restaurant dining area"
-                      width={400}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="aspect-[4/3] overflow-hidden rounded-lg">
-                    <Image
-                      src="https://images.unsplash.com/photo-1592861956120-e524fc739696?q=80&w=1170&auto=format&fit=crop"
-                      alt="Gourmet food plating"
-                      width={400}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
+              <div className="flex-1">
+                <div className="text-sm font-semibold">{r.name}</div>
+                <div className="text-xs opacity-90">{r.review}</div>
               </div>
             </div>
+          ))}
+        </div>
+        <p className="text-sm opacity-90">
+          Read what our guests say and share your experience
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "Catering Services",
+    gradient: "from-orange-400 to-orange-600",
+    content: (
+      <>
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {[
+            { icon: <Users className="w-6 h-6 mx-auto mb-2" />, label: "Corporate" },
+            { icon: <Gift className="w-6 h-6 mx-auto mb-2" />, label: "Weddings" },
+            { icon: <Calendar className="w-6 h-6 mx-auto mb-2" />, label: "Events" },
+            { icon: <Utensils className="w-6 h-6 mx-auto mb-2" />, label: "Private" },
+          ].map((item, i) => (
+            <div key={i} className="bg-white/30 rounded-lg p-3 text-center">
+              {item.icon}
+              <div className="text-xs font-semibold">{item.label}</div>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm opacity-90">
+          Let us cater your special events with our signature dishes
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "Special Events",
+    gradient: "from-blue-400 to-blue-600",
+    content: (
+      <>
+        <div className="text-center mb-4">
+          <div className="bg-white/30 rounded-lg p-3 mb-3">
+            <Clock className="w-8 h-8 mx-auto mb-2" />
+            <div className="text-sm font-semibold">Wine Tasting</div>
+            <div className="text-xs opacity-90">Every Friday 7 PM</div>
           </div>
-  )
-}
+          <div className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
+            Book Now
+          </div>
+        </div>
+        <p className="text-sm opacity-90">
+          Join our exclusive events and culinary experiences
+        </p>
+      </>
+    ),
+  },
+];
 
-export default About
+export default function About() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
+
+  return (
+    <section className="py-16 px-4 bg-gray-50" ref={ref}>
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">About FoodCart</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Experience culinary excellence with our innovative dining features designed to make every visit memorable
+          </p>
+        </div>
+
+        {/* Feature Cards */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          {features.map((item, i) => (
+            <motion.div
+              key={i}
+              variants={cardVariants}
+              whileHover={{ scale: 1.03 }}
+              className={`bg-gradient-to-br ${item.gradient} rounded-3xl p-8 text-white relative overflow-hidden`}
+            >
+              <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 mb-6">
+                {item.content}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Footer Highlights */}
+        <div className="text-center mt-12">
+          <p className="text-lg text-gray-600 mb-6">
+            At FoodCart, we combine traditional flavors with modern innovation to create unforgettable dining experiences.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            {["🍝 Authentic Italian", "🌿 Farm-to-Table", "🍷 Wine Pairings", "👨‍🍳 Chef's Specials"].map((text, i) => (
+              <div key={i} className="bg-white rounded-full px-6 py-3 shadow-md">
+                <span className="text-gray-700 font-semibold">{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -36,7 +36,7 @@ export default function Header() {
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
             <ForkKnife className="w-5 h-5 text-white" />
           </div>
           <span className="text-xl font-semibold text-gray-800">foodCart</span>
@@ -82,14 +82,14 @@ export default function Header() {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <Button className="bg-red-500" onClick={logout}>
-                <LogOutIcon />
+                logout
               </Button>
             </div>
           ) : (
             <div className="hidden md:block">
               <Button
                 onClick={() => setAuthModalOpen(true)}
-                className="bg-green-500 rounded-none hover:bg-green-600 text-white px-6"
+                className="bg-gradient-to-br from-green-400 to-green-600 rounded-none hover:bg-green-600 text-white px-6"
               >
                 Get Started
               </Button>

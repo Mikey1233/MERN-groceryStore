@@ -24,7 +24,7 @@ function Footer() {
                 className="flex-1 bg-white border-white py-3 rounde-none text-black placeholder:text-gray-500 focus:ring-2 focus:ring-black"
                 required
               />
-              <Button type="submit" className="bg-green-400 rounded-none text-white hover:bg-gray-800 px-8 py-2 font-semibold">
+              <Button type="submit" className="bg-gradient-to-br from-green-400 to-green-600 rounded-none text-white hover:bg-gray-800 px-8 py-2 font-semibold">
                 Subscribe
               </Button>
             </form>
@@ -40,7 +40,7 @@ function Footer() {
             {/* Restaurant Info */}
             <div className="space-y-4">
              <Link href={"/"} className="flex items-center space-x-2">
-          <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-radial from-green-400 to-green-600 rounded-full flex items-center justify-center">
             {/* <ShoppingCart className="w-5 h-5 text-white" /> */}
             <ForkKnife className="w-5 h-5 font-extrabold text-white"/>
             {/* <Image src={Logo} height={100} width={100} alt="logo" /> */}

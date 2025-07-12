@@ -143,7 +143,7 @@ function ProductsSection() {
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-green-400 hover:bg-green-500 text-black p-2 md:p-3 rounded-none md:rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-radial from-green-400 to-green-600 hover:bg-green-500 text-black p-2 md:p-3 rounded-none md:rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                 aria-label="Previous products"
               >
                 <ChevronLeft className="h-6 w-6 text-white" />
@@ -151,7 +151,7 @@ function ProductsSection() {
 
               <button
                 onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-green-400 hover:bg-green-500 text-black p-2 md:p-3 rounded-none md:rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-radial from-green-400 to-green-600 hover:bg-green-500 text-black p-2 md:p-3 rounded-none md:rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                 aria-label="Next products"
               >
                 <ChevronRight className="h-6 w-6 text-white" />
@@ -205,7 +205,7 @@ function ProductsSection() {
                       <span className="text-2xl font-bold text-green-600">{product.price}</span>
                       <Button
                     size="sm"
-                    className="bg-green-500 p-1 cursor-pointer hover:bg-green-600 text-white rounded-none"
+                    className="bg-gradient-to-br from-green-400 to-green-600 p-1 cursor-pointer hover:bg-green-600 text-white rounded-none"
                   >
                     {/* Add */}
                     <Plus/>
@@ -225,7 +225,7 @@ function ProductsSection() {
                   key={index}
                   onClick={() => setCurrentIndex(index)}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? "bg-green-400 scale-125" : "bg-gray-300 hover:bg-gray-400"
+                    index === currentIndex ? "bg-radial from-green-400 to-green-600 scale-125" : "bg-gray-300 hover:bg-gray-400"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -236,7 +236,7 @@ function ProductsSection() {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <Button className="bg-green-400 hover:bg-green-600 rounded-none text-white px-8 py-3 text-lg">
+          <Button className="bg-gradient-to-br from-green-400 to-green-600 hover:bg-green-600 rounded-none text-white px-8 py-3 text-lg">
             View Full Menu
           </Button>
         </div>

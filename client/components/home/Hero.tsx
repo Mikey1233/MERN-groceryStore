@@ -21,7 +21,7 @@ function Hero() {
           </p>
 
           {/* CTA Button */}
-          <Button className="bg-green-500 hover:bg-green-600 text-white rounded-none font-semibold px-8 py-5 text-lg">
+          <Button className="bg-gradient-to-br from-green-400 to-green-600 hover:bg-green-600 text-white rounded-none font-semibold px-9 py-6 text-lg">
             BOOK A TABLE
           </Button>
         </div>
