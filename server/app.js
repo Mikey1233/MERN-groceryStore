@@ -5,7 +5,7 @@ const imageUploadRoutes = require("./routes/cloudinaryRoute")
 const app = express()
 const cors = require("cors")
 const corsOptions = {
-  origin:process.env.FRONTEND_SITE, // frontend URL
+  origin: 'https://big-cart-cyan.vercel.app', // frontend URL
    methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // allow cookies or authorization headers
 };
