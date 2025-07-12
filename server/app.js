@@ -5,7 +5,7 @@ const imageUploadRoutes = require("./routes/cloudinaryRoute")
 const app = express()
 const cors = require("cors")
 const corsOptions = {
-  origin:'http://localhost:3000', // frontend URL
+  origin:process.env.FRONTEND_SITE || 'http://localhost:3000', // frontend URL
    methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // allow cookies or authorization headers
 };
