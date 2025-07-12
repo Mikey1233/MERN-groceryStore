@@ -6,17 +6,19 @@ import { toast } from "sonner";
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+  const session  = localStorage.getItem("user")
   const router = useRouter();
+  
 
   useEffect(() => {
-    if (!user) {
+    if (!session) {
       toast.error("Please sign in to access this page");
       router.push("/");
-    } else if (user.role !== "admin") {
+    } else if (user?.role !== "admin") {
       toast.error("Admin access required");
       router.push("/");
     }
-  }, [user, router]);
+  }, [session,user,router]);
 
   // Don't render anything while redirecting
   if (!user || user.role !== "admin") {

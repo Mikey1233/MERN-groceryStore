@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Button } from '../ui/button'
 import hero from "@/public/assets/hero.png";
+import { CalendarCheckIcon } from 'lucide-react';
 
 function Hero() {
   return (
@@ -21,8 +22,8 @@ function Hero() {
           </p>
 
           {/* CTA Button */}
-          <Button className="bg-gradient-to-br from-green-400 to-green-600 hover:bg-green-600 text-white rounded-none font-semibold px-9 py-6 text-lg">
-            BOOK A TABLE
+          <Button className="bg-gradient-to-br rounded-md cursor-pointer from-green-400 to-green-600 hover:bg-green-600 text-white  font-semibold px-11 py-6 text-lg">
+            <span>BOOK A TABLE</span> <CalendarCheckIcon className='text-white font-extrabold'/>
           </Button>
         </div>
 

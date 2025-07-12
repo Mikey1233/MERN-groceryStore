@@ -2,7 +2,7 @@ import React from 'react'
 
 function page() {
   return (
-    <div>Order list</div>
+    <div>Your Orders would be shown here</div>
   )
 }
 

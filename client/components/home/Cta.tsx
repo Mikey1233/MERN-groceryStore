@@ -21,7 +21,7 @@ function Cta() {
               <h2 className="text-3xl font-bold text-green-500 mb-8">
                 Why We Are the Best?
               </h2>
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
                     <Truck className="w-6 h-6 text-white" />
