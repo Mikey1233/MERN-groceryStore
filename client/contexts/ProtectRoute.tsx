@@ -1,29 +1,30 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  const session  = localStorage.getItem("user")
   const router = useRouter();
-  
+  const [isAllowed, setIsAllowed] = useState(false);
 
   useEffect(() => {
+    const session = localStorage.getItem("user");
+
     if (!session) {
       toast.error("Please sign in to access this page");
       router.push("/");
     } else if (user?.role !== "admin") {
       toast.error("Admin access required");
       router.push("/");
+    } else {
+      setIsAllowed(true);
     }
-  }, [session,user,router]);
+  }, [user, router]);
 
-  // Don't render anything while redirecting
-  if (!user || user.role !== "admin") {
-    return null;
+  if (!isAllowed) {
+    return null; // Don’t render anything while checking
   }
 
   return <>{children}</>;
