@@ -12,7 +12,7 @@ export default function ProductFilterTabs({ categories, selectedCategory, setSel
         <button
           key={cat}
           onClick={() => setSelectedCategory(cat)}
-          className={`px-4 py-1 rounded-full border cursor-pointer ${
+          className={`cursor-pointer px-4 py-2 text-sm border rounded hover:bg-gray-500 hover:text-white transition ${
             selectedCategory === cat
               ? "bg-gradient-to-br from-green-400 to-green-600  text-white "
               : "bg-white text-gray-700 border-gray-300"
