@@ -2,6 +2,7 @@ const express = require("express")
 const ConnectDB = require("./configs/db")
 const authRoutes = require("./routes/authRoute")
 const imageUploadRoutes = require("./routes/cloudinaryRoute")
+const productRoutes = require("./routes/productRoute")
 const app = express()
 const cors = require("cors")
 const corsOptions = {
@@ -16,8 +17,13 @@ app.use(express.json())
 ConnectDB()
 
 ///routes
+
+//auth route
 app.use("/api/auth", authRoutes);
+//image upload cloudinary
 app.use("/api/uploadImage",imageUploadRoutes)
+//product router
+app.use("/api/product", productRoutes); 
 //auth route
 
 
