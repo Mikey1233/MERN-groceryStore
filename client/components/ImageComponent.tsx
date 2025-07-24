@@ -1,15 +1,20 @@
 "use client"
 import { Label } from '@radix-ui/react-label'
 import { X, Upload, Cloud } from 'lucide-react'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from './ui/button'
 import { Card } from './ui/card'
 
-function ImageComponent() {
+function ImageComponent({ onImagesChange }: { onImagesChange: (files: File[]) => void }) {
   const [uploadedImages, setUploadedImages] = useState<File[]>([])
   const [draggedOver, setDraggedOver] = useState<number | null>(null)
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([])
 
+
+   useEffect(() => {
+    onImagesChange(uploadedImages.filter(Boolean));
+  }, [uploadedImages, onImagesChange]);
+  
   const handleImageUpload = useCallback(
     (file: File, index: number) => {
       if (file && file.type.startsWith("image/")) {
@@ -28,23 +33,23 @@ function ImageComponent() {
     }
   }
 
-  const handleDragOver = (event: React.DragEvent, index: number) => {
-    event.preventDefault()
-    setDraggedOver(index)
-  }
+  // const handleDragOver = (event: React.DragEvent, index: number) => {
+  //   event.preventDefault()
+  //   setDraggedOver(index)
+  // }
 
-  const handleDragLeave = () => {
-    setDraggedOver(null)
-  }
+  // const handleDragLeave = () => {
+  //   setDraggedOver(null)
+  // }
 
-  const handleDrop = (event: React.DragEvent, index: number) => {
-    event.preventDefault()
-    setDraggedOver(null)
-    const file = event.dataTransfer.files[0]
-    if (file) {
-      handleImageUpload(file, index)
-    }
-  }
+  // const handleDrop = (event: React.DragEvent, index: number) => {
+  //   event.preventDefault()
+  //   setDraggedOver(null)
+  //   const file = event.dataTransfer.files[0]
+  //   if (file) {
+  //     handleImageUpload(file, index)
+  //   }
+  // }
 
   const removeImage = (index: number) => {
     const newImages = [...uploadedImages]
@@ -86,9 +91,9 @@ function ImageComponent() {
                               : "border-gray-300 hover:border-gray-400"
                         }`}
                         onClick={() => !hasImage && fileInputRefs.current[index]?.click()}
-                        onDragOver={(e) => handleDragOver(e, index)}
-                        onDragLeave={handleDragLeave}
-                        onDrop={(e) => handleDrop(e, index)}
+                        // onDragOver={(e) => handleDragOver(e, index)}
+                        // onDragLeave={handleDragLeave}
+                        // onDrop={(e) => handleDrop(e, index)}
                       >
                         {hasImage ? (
                           <div className="relative h-full w-full">

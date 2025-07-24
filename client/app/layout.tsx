@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Lato} from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import { Toaster } from "sonner";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Providers } from "@/components/providers/Provider";
+
 // import ProtectedRoute from "@/contexts/ProtectRoute";
 
 // const geistSans = Geist({
@@ -16,15 +19,16 @@ import { Toaster } from "sonner";
 //   subsets : ["latin"]
 // });
 const lato = Lato({
-  variable :"--font-lato",
-  weight :["100","300","400","700","900"],
-  subsets :["latin"]
-})
+  variable: "--font-lato",
+  weight: ["100", "300", "400", "700", "900"],
+  subsets: ["latin"],
+});
 
 // const geistMono = Geist_Mono({
 //   variable: "--font-poppins",
 //   subsets: ["latin"],
 // });
+const queryClient = new QueryClient();
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -41,14 +45,20 @@ export default function RootLayout({
       <body
         className={`${lato.className} antialiased  overflow-x-hidden bg-white`}
       >
-        <AuthProvider>
-          <Toaster position="bottom-right"/>
-          {/* <ProtectedRoute> */}
+          <Providers>
+          <Header />
+          {children}
+        </Providers>
+        {/* <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <Toaster position="bottom-right" />
+           
             <Header />
 
             {children}
-          {/* </ProtectedRoute> */}
-        </AuthProvider>
+          
+          </QueryClientProvider>
+        </AuthProvider> */}
       </body>
     </html>
   );

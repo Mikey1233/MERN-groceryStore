@@ -13,9 +13,9 @@ function BestSeller() {
             {BestSellers.map((item, i) => (
               <ProductRating
                 key={i}
-                name={item.name}
-                slashPrice={item.slashPrice}
-                price={item.price}
+                productName={item.name}
+                OfferAmount={item.slashPrice}
+                Amount={item.price}
                 category={item.category}
                 image={item.image}
               />

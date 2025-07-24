@@ -3,13 +3,15 @@ import React from 'react'
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
 import Image, { StaticImageData } from 'next/image'
-function ProductRating({name,slashPrice,price,image,category}:{
-    name:string,
-    slashPrice : number,
-    price :number,
+function ProductRating({productName,OfferAmount,Amount,image,category}:{
+    productName:string,
+    OfferAmount : number,
+    Amount :number,
     image : string | StaticImageData,
     category : string,
 }) {
+
+  // console.log({name,slashPrice,price,image,category})
   return (
  <Card className="bg-white border hover:shadow-lg transition-shadow">
               <CardContent className="p-4">
@@ -20,10 +22,12 @@ function ProductRating({name,slashPrice,price,image,category}:{
                   width={120}
                   height={120}
                   className="mx-auto mb-4"
+                  unoptimized
+                
                 />
                 <h3 className="font-semibold text-gray-800 mb-2">
                   {/* Brown Bread 400g */}
-                  {name}
+                  {productName}
                 </h3>
                 <div className="flex items-center gap-1 mb-2">
                   {[...Array(5)].map((_, i) => (
@@ -41,10 +45,10 @@ function ProductRating({name,slashPrice,price,image,category}:{
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-lg font-bold text-green-600">
-                      ${price}
+                      ${OfferAmount}
                     </span>
                     <span className="text-sm text-gray-500 line-through ml-2">
-                      ${slashPrice}
+                      ${Amount}
                     </span>
                   </div>
                   <Button

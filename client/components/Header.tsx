@@ -1,6 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ForkKnife, LogOutIcon, Menu, ShoppingCart, X } from "lucide-react";
+import {
+  BadgeCheck,
+  ForkKnife,
+  Menu,
+  ShoppingCart,
+  UserCircle2,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
@@ -9,6 +16,12 @@ import { AuthModal } from "./AuthModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -32,7 +45,9 @@ export default function Header() {
   }, [isMenuOpen]);
 
   return (
-    <header className={`bg-white  'relative'  shadow-sm px-6 py-4 md:px-24 w-full z-50`}>
+    <header
+      className={`bg-white  'relative'  shadow-sm px-6 py-4 md:px-24 w-full z-50`}
+    >
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
@@ -77,10 +92,29 @@ export default function Header() {
                   0
                 </Badge>
               </Link>
-              <Avatar>
-                <AvatarImage src={user?.profileImage ?? undefined} />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Avatar className="cursor-pointer">
+                      <AvatarImage src={user?.profileImage ?? undefined} />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full text-white font-medium flex items-center gap-1`}
+                    >
+                      {user?.role === "admin" ? (
+                        <BadgeCheck className="w-3.5 h-3.5" />
+                      ) : (
+                        <UserCircle2 />
+                      )}
+                      {user?.role === "admin" ? "Admin" : "Customer"}
+                    </span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <Button className="bg-red-500" onClick={logout}>
                 logout
               </Button>
@@ -101,7 +135,7 @@ export default function Header() {
             onClick={toggleMenu}
             className="md:hidden text-gray-600 focus:outline-none"
           >
-               <Menu className="w-6 h-6" />
+            <Menu className="w-6 h-6" />
             {/* {isMenuOpen && (
            
             )} */}
@@ -116,7 +150,7 @@ export default function Header() {
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
-         <X className="w-6 h-6 absolute right-2 top-3" onClick={closeMenu}/>
+        <X className="w-6 h-6 absolute right-2 top-3" onClick={closeMenu} />
         <div className="flex flex-col gap-6 p-6 pt-20">
           {user && (
             <Avatar className="w-10 h-10">
@@ -124,15 +158,15 @@ export default function Header() {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           )}
-         {
-          user?.role == "admin" &&(<Link
-            href="/adminDashboard"
-            className="text-gray-600 hover:text-gray-800"
-            onClick={closeMenu}
-          >
-            Seller Dashboard
-          </Link>)
-         } 
+          {user?.role == "admin" && (
+            <Link
+              href="/adminDashboard"
+              className="text-gray-600 hover:text-gray-800"
+              onClick={closeMenu}
+            >
+              Seller Dashboard
+            </Link>
+          )}
           <Link
             href="/"
             className="text-gray-600 hover:text-gray-800"
@@ -147,14 +181,16 @@ export default function Header() {
           >
             All Product
           </Link>
-            <Link href="/cart" className="relative flex items-center gap-3 text-gray-600 hover:text-gray-800">
-                {/* <ShoppingCart className="w-6 h-6 text-gray-600" /> */}
-                <span>Cart
-                </span>
-                <Badge className=" bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0">
-                  0
-                </Badge>
-              </Link>
+          <Link
+            href="/cart"
+            className="relative flex items-center gap-3 text-gray-600 hover:text-gray-800"
+          >
+            {/* <ShoppingCart className="w-6 h-6 text-gray-600" /> */}
+            <span>Cart</span>
+            <Badge className=" bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center p-0">
+              0
+            </Badge>
+          </Link>
           {user ? (
             <Button
               className="bg-red-500 w-full"

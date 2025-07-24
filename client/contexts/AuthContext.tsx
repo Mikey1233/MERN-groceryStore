@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 type User = {
   name: string;
+  _id : string ;
   email: string;
   role: "admin" | "customer";
   token: string;
