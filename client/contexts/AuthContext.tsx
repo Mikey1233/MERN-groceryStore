@@ -101,38 +101,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  // const login = async (value: SignIn) => {
-  //   try {
-  //     console.log(value)
-  //     const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
-  //     const res = await axios.post("/auth/login", {
-  //       email: value.email,
-  //       password: value.password,
-  //       guestCart,
-  //     });
-      
-  //      if (!res?.data || res.status !== 200) {
-  //       throw new Error("Error in logging in");
-  //     }
-  //     const data = res.data;
-  //     // console.log(data);
-  //     setUser({ ...data.user, token: data.token });
-  //     setCart(data.user.cart);
-  //     localStorage.setItem(
-  //       "user",
-  //       JSON.stringify({ ...data.user, token: data.token })
-  //     );
-  //     localStorage.setItem("cart", JSON.stringify(data.user.cart));
-  //     toast.success(" login successful")
 
-  //     return data;
-  //   } catch (err) {
-  //     console.error("Error loging user in", err);
-  //     toast.error('Error loging user in')
-  //   }
-  // };
-// import axios from "axios";
-// import { toast } from "sonner";
+
 
 const login = async (value: SignIn) => {
   try {
